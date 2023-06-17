@@ -1,8 +1,9 @@
 using UnityEngine;
+using Define;
 
 public class MoveCharacter : MonoBehaviour
 {
-    private NearDetection detection;
+    private NearDetection nearDetection;
     [SerializeField]
     private static float ALREADY_VISIT_MOVE_SPEED = 10.0f;
     private static float FIRST_TIME_MOVE_SPEED = 5.0f;
@@ -15,7 +16,7 @@ public class MoveCharacter : MonoBehaviour
     void Start()
     {
         nowTime = 1.1f;
-        detection = GetComponent<NearDetection>();
+        nearDetection = GetComponent<NearDetection>();
     }
     void Update()
     {
@@ -60,16 +61,13 @@ public class MoveCharacter : MonoBehaviour
                 PressKey("Down");
             }
 
-            GameObject centerObj = detection.GetGameObject(EnumManager.detection.center);
+            GameObject centerObj = nearDetection.spotCenter;
 
-            if (centerObj != null)
+            if (centerObj != null && centerObj.tag == "Spot")
             {
-                if (centerObj.tag == "Spot")
+                if (centerObj.GetComponent<SpotInfo>().Item != null)
                 {
-                    if (centerObj.GetComponent<SpotInfo>().Item != null)
-                    {
-                        spotProcessing(centerObj.GetComponent<SpotInfo>());
-                    }
+                    spotProcessing(centerObj.GetComponent<SpotInfo>());
                 }
             }
         }
@@ -83,37 +81,37 @@ public class MoveCharacter : MonoBehaviour
             case "Left" : // left
                 if (isOverWorld(transform.position - transform.right)) return;
                 target = transform.position - transform.right;
-                lineProcessing(detection.GetGameObject(EnumManager.detection.left)?.GetComponent<LineInfo>());
+                lineProcessing(nearDetection.roadLeft?.GetComponent<LineInfo>());
                 break;
 
             case "Right" : // right
                 if (isOverWorld(transform.position + transform.right)) return;
                 target = transform.position + transform.right;
-                lineProcessing(detection.GetGameObject(EnumManager.detection.right)?.GetComponent<LineInfo>());
+                lineProcessing(nearDetection.roadRight?.GetComponent<LineInfo>());
                 break;
 
             case "Forward" : // forward
                 if (isOverWorld(transform.position + transform.forward)) return;
                 target = transform.position + transform.forward;
-                lineProcessing(detection.GetGameObject(EnumManager.detection.front)?.GetComponent<LineInfo>());
+                lineProcessing(nearDetection.roadFront?.GetComponent<LineInfo>());
                 break;
 
             case "Back" :
                 if (isOverWorld(transform.position - transform.forward)) return;
                 target = transform.position - transform.forward;
-                lineProcessing(detection.GetGameObject(EnumManager.detection.back)?.GetComponent<LineInfo>());
+                lineProcessing(nearDetection.roadBack?.GetComponent<LineInfo>());
                 break;
 
             case "Up" : // w
                 if (isOverWorld(transform.position + transform.up)) return;
                 target = transform.position + transform.up;
-                lineProcessing(detection.GetGameObject(EnumManager.detection.up)?.GetComponent<LineInfo>());
+                lineProcessing(nearDetection.roadUp?.GetComponent<LineInfo>());
                 break;
 
             case "Down" : // s
                 if (isOverWorld(transform.position - transform.up)) return;
                 target = transform.position - transform.up;
-                lineProcessing(detection.GetGameObject(EnumManager.detection.down)?.GetComponent<LineInfo>());
+                lineProcessing(nearDetection.roadDown?.GetComponent<LineInfo>());
                 break;
         }
         
@@ -141,7 +139,7 @@ public class MoveCharacter : MonoBehaviour
 
         moveSpeed = (line.needMovement > 0) ? FIRST_TIME_MOVE_SPEED : ALREADY_VISIT_MOVE_SPEED;
 
-        GameMgr.Instance.remainingMovement -= line.needMovement;
+        GameManager.Instance.remainingMovement -= line.needMovement;
         line.needMovement = 0;
         line.AlreadyVisit = true;
         line.UpdateMeshRenderer(FIRST_TIME_MOVE_SPEED * Time.deltaTime);
@@ -151,7 +149,7 @@ public class MoveCharacter : MonoBehaviour
     {
         if (spot == null) return;
 
-        GameMgr.Instance.remainingMovement += spot.recoverMovement;
+        GameManager.Instance.remainingMovement += spot.recoverMovement;
         TreeManager.Instance.GetItems = spot.Item;
         spot.Item = null;
     }

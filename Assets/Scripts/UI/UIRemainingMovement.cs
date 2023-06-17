@@ -13,6 +13,6 @@ public class UIRemainingMovement : MonoBehaviour
 
     void Update()
     {
-        m_text.text = GameMgr.Instance.remainingMovement.ToString();
+        m_text.text = GameManager.Instance.remainingMovement.ToString();
     }
 }

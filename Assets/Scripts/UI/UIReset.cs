@@ -15,7 +15,7 @@ public class UIReset : MonoBehaviour
 
     public void GameReset()
     {
-        GameMgr.Instance.isEnd = false;
+        GameManager.Instance.isEnd = false;
 
         character.gameObject.SetActive(true);
         character.transform.position = Vector3.zero;
@@ -28,7 +28,7 @@ public class UIReset : MonoBehaviour
 
         playCanvas.SetActive(true);
 
-        GameMgr.Instance.remainingMovement = (MapManager.Instance.width * MapManager.Instance.height * MapManager.Instance.depth) / 10;
+        GameManager.Instance.remainingMovement = (MapManager.Instance.width * MapManager.Instance.height * MapManager.Instance.depth) / 10;
 
         Transform[] items = TreeManager.Instance.transform.GetComponentsInChildren<Transform>(true);
         foreach (Transform i in items) if(i.tag == "Item") Destroy(i.gameObject);

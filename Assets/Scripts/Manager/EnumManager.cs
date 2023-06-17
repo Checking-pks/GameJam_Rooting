@@ -1,6 +1,5 @@
-using UnityEngine;
 
-public class EnumManager : Singleton<EnumManager>
+namespace Define
 {
     public enum detection
     {

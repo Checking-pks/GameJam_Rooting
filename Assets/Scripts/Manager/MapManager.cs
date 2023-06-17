@@ -27,7 +27,7 @@ public class MapManager : Singleton<MapManager>
 
     private void Update()
     {
-        if (GameMgr.Instance.isEnd) transform.Rotate(Vector3.up * TURN_SPEED * Time.deltaTime);
+        if (GameManager.Instance.isEnd) transform.Rotate(Vector3.up * TURN_SPEED * Time.deltaTime);
     }
 
     public void makeMap()

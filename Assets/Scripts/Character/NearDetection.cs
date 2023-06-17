@@ -1,73 +1,72 @@
 using UnityEngine;
+using Define;
 
 public class NearDetection : MonoBehaviour
 {
     
     [Header("- Spot")]
-    [SerializeField]
-    private GameObject spotCenter;
+    public GameObject spotCenter;
 
     [Header("- Road")]
-    [SerializeField]
-    private GameObject roadFront;
-    [SerializeField]
-    private GameObject roadBack;
-    [SerializeField]
-    private GameObject roadLeft;
-    [SerializeField]
-    private GameObject roadRight;
-    [SerializeField]
-    private GameObject roadUp;
-    [SerializeField]
-    private GameObject roadDown;
+    public GameObject roadFront;
+    public GameObject roadBack, roadLeft, roadRight, roadUp, roadDown;
+    private Ray rayFront, rayBack, rayLeft, rayRight, rayUp, rayDown;
+    private detection[] detections = {detection.front, detection.back, detection.left, detection.right, detection.up, detection.down, detection.center};
 
-    public GameObject GetGameObject(EnumManager.detection type)
+    private void Update()
     {
-        switch(type)
-        {
-            case EnumManager.detection.front:
-                return roadFront;
-            case EnumManager.detection.back:
-                return roadBack;
-            case EnumManager.detection.left:
-                return roadLeft;
-            case EnumManager.detection.right:
-                return roadRight;
-            case EnumManager.detection.up:
-                return roadUp;
-            case EnumManager.detection.down:
-                return roadDown;
-            case EnumManager.detection.center:
-                return spotCenter;
-            default:
-                return null;
-        }
+        UpdateRay();
+        foreach (detection d in detections)
+            UpdateRayHit(d);
     }
-    public void SetGameObject(EnumManager.detection type, GameObject obj)
+
+    private void UpdateRay()
+    {
+        rayFront    = new Ray(transform.position, transform.forward);
+        rayBack     = new Ray(transform.position, -transform.forward);
+        rayLeft     = new Ray(transform.position, -transform.right);
+        rayRight    = new Ray(transform.position, transform.right);
+        rayUp       = new Ray(transform.position, transform.up);
+        rayDown     = new Ray(transform.position, -transform.up);
+    }
+
+    private void UpdateRayHit(detection type)
     {
         switch(type)
         {
-            case EnumManager.detection.front:
-                roadFront = obj;
+            case detection.front:
+                roadFront = GetGameObject(rayFront);
                 break;
-            case EnumManager.detection.back:
-                roadBack = obj;
+            case detection.back:
+                roadBack = GetGameObject(rayBack);
                 break;
-            case EnumManager.detection.left:
-                roadLeft = obj;
+            case detection.left:
+                roadLeft = GetGameObject(rayLeft);
                 break;
-            case EnumManager.detection.right:
-                roadRight = obj;
+            case detection.right:
+                roadRight = GetGameObject(rayRight);
                 break;
-            case EnumManager.detection.up:
-                roadUp = obj;
+            case detection.up:
+                roadUp = GetGameObject(rayUp);
                 break;
-            case EnumManager.detection.down:
-                roadDown = obj;
+            case detection.down:
+                roadDown = GetGameObject(rayDown);
                 break;
-            case EnumManager.detection.center:
-                spotCenter = obj;
+            case detection.center:
+                spotCenter = Physics.OverlapSphere(transform.position, 0.1f)?[0].gameObject;
                 break;
-        }
+            default:
+                return;
+        } 
+    }
+
+    private GameObject GetGameObject(Ray ray)
+    {
+        RaycastHit hitData;
+
+        if (Physics.Raycast(ray, out hitData, LayerMask.NameToLayer("Map")))
+            return hitData.transform.gameObject;
+        else
+            return null;
     }
 }

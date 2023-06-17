@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TreeManager : Singleton<TreeManager>
 {
+    public GameObject[] itemList;
+
     public float maxHeight = 0;
     public List<GameObject> getItems;
     [Space(10f)]
@@ -18,7 +20,7 @@ public class TreeManager : Singleton<TreeManager>
 
     private void Update()
     {
-        if (GameMgr.Instance.isEnd) transform.Rotate(Vector3.up * TURN_SPEED * Time.deltaTime);
+        if (GameManager.Instance.isEnd) transform.Rotate(Vector3.up * TURN_SPEED * Time.deltaTime);
     }
     
     public int itemCount()

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SpotInfo : MonoBehaviour
@@ -23,10 +21,6 @@ public class SpotInfo : MonoBehaviour
 
     [Space(20f)]
     [SerializeField]
-    private GameObject[] itemList;
-
-    [Space(20f)]
-    [SerializeField]
     private Color defaultColor = Color.white;
     [SerializeField]
     private Color haveItemColor = Color.red;
@@ -35,10 +29,10 @@ public class SpotInfo : MonoBehaviour
     {
         valueProbability = Random.Range(0, 100);
 
-        if (valueProbability < itemProbability && itemList.Length > 0 && transform.position != Vector3.zero)
+        if (valueProbability < itemProbability && TreeManager.Instance.itemList.Length > 0 && transform.position != Vector3.zero)
         {
-            int itemCode = Random.Range(0, itemList.Length);
-            item = itemList[itemCode];
+            int itemCode = Random.Range(0, TreeManager.Instance.itemList.Length);
+            item = TreeManager.Instance.itemList[itemCode];
             GetComponent<MeshRenderer>().material.color = haveItemColor;
         }
         else
