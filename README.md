@@ -38,4 +38,5 @@
 <br>
 
 ## 🛠️ Installation
+- [Play Store](https://play.google.com/store/apps/details?id=com.GameJam.Rooting&pli=1)
 - [Global Game Jam - Rooting](https://globalgamejam.org/2023/games/rooting-1)
